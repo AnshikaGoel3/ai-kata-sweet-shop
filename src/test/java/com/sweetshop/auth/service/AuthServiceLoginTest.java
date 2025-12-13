@@ -28,10 +28,10 @@ class AuthServiceLoginTest {
     void login_success_whenCredentialsAreCorrect() {
         authService.register("john", "password123");
 
-        User user = authService.login("john", "password123");
-
-        assertThat(user).isNotNull();
-        assertThat(user.getUsername()).isEqualTo("john");
+        
+        String token = authService.login("john", "password123");
+        assertThat(token).isNotBlank();
+       
     }
 
     @Test

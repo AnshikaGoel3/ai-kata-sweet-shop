@@ -1,5 +1,6 @@
 package com.sweetshop.auth.service;
 
+import com.sweetshop.security.JwtUtil;
 import com.sweetshop.user.model.Role;
 import com.sweetshop.user.model.User;
 import com.sweetshop.user.repository.UserRepository;
@@ -34,7 +35,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User login(String username, String password) {
+    public String login(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
@@ -42,6 +43,6 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        return user;
+        return JwtUtil.generateToken(user.getUsername(), user.getRole());
     }
 }
