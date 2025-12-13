@@ -24,4 +24,27 @@ public class SweetService {
     public void deleteSweet(Long id) {
         sweetRepository.deleteById(id);
     }
+
+    @Transactional
+public Sweet purchaseSweet(Long id, int quantity) {
+    Sweet sweet = sweetRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Sweet not found"));
+
+    if (sweet.getQuantity() < quantity) {
+        throw new IllegalStateException("Insufficient stock");
+    }
+
+    sweet.setQuantity(sweet.getQuantity() - quantity);
+    return sweetRepository.save(sweet);
+}
+
+@Transactional
+public Sweet restockSweet(Long id, int quantity) {
+    Sweet sweet = sweetRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Sweet not found"));
+
+    sweet.setQuantity(sweet.getQuantity() + quantity);
+    return sweetRepository.save(sweet);
+}
+
 }
