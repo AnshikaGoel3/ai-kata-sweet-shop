@@ -1,5 +1,6 @@
 package com.sweetshop.auth.service;
 
+import com.sweetshop.config.SecurityBeansConfig;
 import com.sweetshop.user.model.User;
 import com.sweetshop.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(AuthService.class)
+@Import({AuthService.class, SecurityBeansConfig.class})
 class AuthServiceLoginTest {
 
     @Autowired

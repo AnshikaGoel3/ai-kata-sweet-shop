@@ -1,5 +1,6 @@
 package com.sweetshop.auth.service;
 
+import com.sweetshop.config.SecurityBeansConfig;
 import com.sweetshop.user.model.Role;
 import com.sweetshop.user.model.User;
 import com.sweetshop.user.repository.UserRepository;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@Import(AuthService.class)
+@Import({AuthService.class, SecurityBeansConfig.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
 class AuthServiceTest {
