@@ -4,21 +4,22 @@ import com.sweetshop.security.JwtUtil;
 import com.sweetshop.user.model.Role;
 import com.sweetshop.user.model.User;
 import com.sweetshop.user.repository.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public User register(String username, String password) {
@@ -43,6 +44,10 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        return JwtUtil.generateToken(user.getUsername(), user.getRole());
+        // ✅ FIX: role converted to String
+        return jwtUtil.generateToken(
+                user.getUsername(),
+                user.getRole().name()
+        );
     }
 }
