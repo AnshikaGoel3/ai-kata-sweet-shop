@@ -1,6 +1,10 @@
 package com.sweetshop.security;
 
 import com.sweetshop.user.model.Role;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -22,4 +26,29 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+    public static Claims extractClaims(String token) {
+        Jws<Claims> claimsJws = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
+        return claimsJws.getBody();
+    }
+
+    public static String extractUsername(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    public static String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
+    }
+
+    public static boolean isTokenValid(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
 }
