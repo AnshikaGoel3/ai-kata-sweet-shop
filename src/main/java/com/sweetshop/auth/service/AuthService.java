@@ -35,4 +35,16 @@ public class AuthService {
         // placeholder encoder (will replace with BCrypt later)
         return "ENC(" + rawPassword + ")";
     }
+
+    public User login(String username, String password) {
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+
+    if (!user.getPassword().equals(encodePassword(password))) {
+        throw new IllegalArgumentException("Invalid credentials");
+    }
+
+    return user;
+}
+
 }
