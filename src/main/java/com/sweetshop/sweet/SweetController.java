@@ -24,6 +24,18 @@ public class SweetController {
         Sweet saved = sweetService.addSweet(sweet);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+    
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public List<Sweet> searchSweets(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice) {
+
+    return sweetService.searchSweets(name, category, minPrice, maxPrice);
+    }
+
 
     // USER / ADMIN: list sweets
     @GetMapping
@@ -55,5 +67,15 @@ public class SweetController {
                             @RequestParam int quantity) {
         return sweetService.restockSweet(id, quantity);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Sweet updateSweet(
+            @PathVariable Long id,
+            @RequestBody Sweet sweet) {
+
+        return sweetService.updateSweet(id, sweet);
+    }
+
 
 }

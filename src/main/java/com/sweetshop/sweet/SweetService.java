@@ -26,6 +26,28 @@ public class SweetService {
     public void deleteSweet(Long id) {
         sweetRepository.deleteById(id);
     }
+    
+    public List<Sweet> searchSweets(
+        String name,
+        String category,
+        Double minPrice,
+        Double maxPrice) {
+
+        if (name != null) {
+            return sweetRepository.findByNameContainingIgnoreCase(name);
+        }
+
+        if (category != null) {
+            return sweetRepository.findByCategoryIgnoreCase(category);
+        }
+
+        if (minPrice != null && maxPrice != null) {
+            return sweetRepository.findByPriceBetween(minPrice, maxPrice);
+        }
+
+        return sweetRepository.findAll();
+    }
+
 
     @Transactional
 public Sweet purchaseSweet(Long id, int quantity) {
@@ -48,5 +70,18 @@ public Sweet restockSweet(Long id, int quantity) {
     sweet.setQuantity(sweet.getQuantity() + quantity);
     return sweetRepository.save(sweet);
 }
+
+public Sweet updateSweet(Long id, Sweet updatedSweet) {
+    Sweet existing = sweetRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Sweet not found"));
+
+    existing.setName(updatedSweet.getName());
+    existing.setCategory(updatedSweet.getCategory());
+    existing.setPrice(updatedSweet.getPrice());
+    existing.setQuantity(updatedSweet.getQuantity());
+
+    return sweetRepository.save(existing);
+}
+
 
 }
