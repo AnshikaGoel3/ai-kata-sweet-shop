@@ -33,7 +33,6 @@ public class JwtUtil {
         return extractClaims(token).getSubject();
     }
 
-    // ✅ MUST BE PUBLIC
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())

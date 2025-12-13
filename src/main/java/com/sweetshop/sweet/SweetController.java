@@ -41,19 +41,19 @@ public class SweetController {
     }
 
     // USER → PURCHASE
-@PreAuthorize("hasRole('USER')")
-@PostMapping("/{id}/purchase")
-public Sweet purchaseSweet(@PathVariable Long id,
-                           @RequestParam int quantity) {
-    return sweetService.purchaseSweet(id, quantity);
-}
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/{id}/purchase")
+    public Sweet purchaseSweet(@PathVariable Long id,
+                            @RequestParam int quantity) {
+        return sweetService.purchaseSweet(id, quantity);
+    }
 
-// ADMIN → RESTOCK
-@PreAuthorize("hasRole('ADMIN')")
-@PostMapping("/{id}/restock")
-public Sweet restockSweet(@PathVariable Long id,
-                          @RequestParam int quantity) {
-    return sweetService.restockSweet(id, quantity);
-}
+    // ADMIN → RESTOCK
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/restock")
+    public Sweet restockSweet(@PathVariable Long id,
+                            @RequestParam int quantity) {
+        return sweetService.restockSweet(id, quantity);
+    }
 
 }

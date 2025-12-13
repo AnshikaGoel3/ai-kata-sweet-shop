@@ -23,6 +23,7 @@ public class AuthService {
     }
 
     public User register(String username, String password, Role role) {
+
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalStateException("Username already exists");
         }
@@ -30,11 +31,12 @@ public class AuthService {
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(role == null ? Role.USER : role)
+                .role(role != null ? role : Role.USER) 
                 .build();
 
         return userRepository.save(user);
     }
+
 
     public String login(String username, String password) {
         User user = userRepository.findByUsername(username)
