@@ -28,7 +28,7 @@ class AuthServiceTest {
 
     @Test
     void registerUser_successfullyCreatesUser() {
-        User user = authService.register("john", "password123");
+        User user = authService.register("john", "password123", null);
 
         assertThat(user.getId()).isNotNull();
         assertThat(user.getUsername()).isEqualTo("john");
@@ -38,10 +38,10 @@ class AuthServiceTest {
 
     @Test
     void registerUser_throwsExceptionIfUsernameExists() {
-        authService.register("john", "password123");
+        authService.register("john", "password123", null);
 
         assertThatThrownBy(() ->
-                authService.register("john", "anotherPass")
+                authService.register("john", "anotherPass", null)
         ).isInstanceOf(IllegalStateException.class);
     }
 }

@@ -26,7 +26,7 @@ class AuthServiceLoginTest {
 
     @Test
     void login_success_whenCredentialsAreCorrect() {
-        authService.register("john", "password123");
+        authService.register("john", "password123", null);
 
         
         String token = authService.login("john", "password123");
@@ -36,7 +36,7 @@ class AuthServiceLoginTest {
 
     @Test
     void login_fails_whenPasswordIsWrong() {
-        authService.register("john", "password123");
+        authService.register("john", "password123", null);
 
         assertThatThrownBy(() ->
                 authService.login("john", "wrongPassword")

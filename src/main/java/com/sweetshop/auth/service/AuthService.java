@@ -22,7 +22,7 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public User register(String username, String password) {
+    public User register(String username, String password, Role role) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalStateException("Username already exists");
         }
@@ -30,7 +30,7 @@ public class AuthService {
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(Role.USER)
+                .role(role == null ? Role.USER : role)
                 .build();
 
         return userRepository.save(user);

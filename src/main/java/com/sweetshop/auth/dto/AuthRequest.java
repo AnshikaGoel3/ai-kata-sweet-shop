@@ -1,16 +1,13 @@
 package com.sweetshop.auth.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.sweetshop.user.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class AuthRequest {
-
-    @NotBlank
     private String username;
-
-    @NotBlank
     private String password;
+    private Role role;   
 }
