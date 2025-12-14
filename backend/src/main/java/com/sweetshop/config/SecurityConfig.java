@@ -31,7 +31,10 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
             "https://ai-kata-sweet-shop.vercel.app",
-            "https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app"
+            "https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app",
+
+            "https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app", 
+            "https://ai-kata-sweet-shop-nytemnsk8-anshikagoel3s-projects.vercel.app"
         ));
 
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
