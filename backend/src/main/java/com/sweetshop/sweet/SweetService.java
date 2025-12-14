@@ -79,7 +79,7 @@ public Sweet updateSweet(Long id, Sweet updatedSweet) {
     existing.setCategory(updatedSweet.getCategory());
     existing.setPrice(updatedSweet.getPrice());
     existing.setQuantity(updatedSweet.getQuantity());
-
+    existing.setImageUrl(updatedSweet.getImageUrl());
     return sweetRepository.save(existing);
 }
 

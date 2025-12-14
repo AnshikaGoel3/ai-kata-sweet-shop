@@ -40,7 +40,7 @@ const AdminModal = ({ open, handleClose, handleSubmit, initialData }) => {
             <TextField label="Quantity" name="quantity" type="number" fullWidth required value={formData.quantity} onChange={handleChange} />
           </Box>
 
-          <TextField label="Image URL (Unsplash)" name="imageUrl" fullWidth required value={formData.imageUrl} onChange={handleChange} helperText="Paste a valid image link" />
+          <TextField label="Image URL" name="imageUrl" fullWidth required value={formData.imageUrl} onChange={handleChange} helperText="Paste a valid image link" />
 
           {/* Image Preview */}
           {formData.imageUrl && (
