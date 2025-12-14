@@ -27,22 +27,20 @@ const SweetCard = ({ sweet, role, onBuy, onEdit, onDelete, onRestock }) => {
     >
     
       <Box sx={{ position: 'relative', height: 200, overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
-        <CardMedia
-          component="img"
-          height="200"
-          // 1. PRIORITY: Use the link you pasted in the database
-          image={sweet.imageUrl} 
-          alt={sweet.name}
-          // 2. SAFETY NET: Only show a default if your link is actually broken (404)
-          onError={(e) => {
-            e.target.onerror = null; 
-            // This is a generic "Sweets" placeholder from Unsplash that works reliably
-            e.target.src = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000&auto=format&fit=crop"; 
-          }}
-          sx={{ 
-            transition: "transform 0.5s ease",
-            "&:hover": { transform: "scale(1.1)" }
-          }}
+      <CardMedia
+        component="img"
+        height="200"
+        // CHECK BOTH: If "imageUrl" is missing, try "image". If both missing, use default.
+        image={sweet.imageUrl || sweet.image || "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000&auto=format&fit=crop"}
+        alt={sweet.name}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000&auto=format&fit=crop";
+        }}
+        sx={{ 
+          transition: "transform 0.5s ease",
+          "&:hover": { transform: "scale(1.1)" }
+        }}
       />
         <Chip 
           label={sweet.category} 
