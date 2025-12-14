@@ -1,5 +1,6 @@
 package com.sweetshop.sweet;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,8 @@ public class Sweet {
     private String category;
     private Double price;
     private Integer quantity;
-
+    @Column(name = "image_url", length = 1000)
+    private String imageUrl;
     public Long getId() {
         return id;
     }
@@ -51,5 +53,13 @@ public class Sweet {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
