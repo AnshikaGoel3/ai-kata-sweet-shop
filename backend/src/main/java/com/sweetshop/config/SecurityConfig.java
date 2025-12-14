@@ -3,6 +3,7 @@ package com.sweetshop.config;
 import com.sweetshop.security.JwtAuthenticationFilter;
 
 import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,18 +30,16 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList(
-            "http://localhost:5173",
-            "https://ai-kata-sweet-shop.vercel.app",
-            "https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app",
-
-            "https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app", 
-            "https://ai-kata-sweet-shop-nytemnsk8-anshikagoel3s-projects.vercel.app"
-        ));
+        // ULTIMATE CORS FIX: Replacing the specific list of domains with '*'
+        // to accept connections from ANY Vercel or local URL.
+        config.setAllowedOrigins(Arrays.asList("*"));
 
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
-        config.setAllowCredentials(true);
+
+        // IMPORTANT: Set AllowCredentials to false when using AllowedOrigins: "*"
+        // The browser will often block credentials when '*' is used.
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -50,24 +49,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Explicitly enable CORS using the CorsConfigurationSource defined below
-            .cors() 
+            // Explicitly enable CORS
+            .cors()
             .and()
             .csrf().disable() // Disable CSRF
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                // NEW: Allow all OPTIONS requests globally for CORS preflight checks
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
-                
+                // CRITICAL FIX: Allow all OPTIONS requests globally for CORS preflight checks
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 // The unauthenticated paths (login/register)
                 .requestMatchers("/api/auth/**").permitAll()
-                
+
                 // All other authenticated paths
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+            );
 
         return http.build();
     }
