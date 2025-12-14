@@ -5,6 +5,7 @@ import com.sweetshop.security.JwtAuthenticationFilter;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -49,14 +50,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors()
+            // 1. Explicitly enable CORS using the CorsConfigurationSource defined below
+            .cors() 
             .and()
-            .csrf().disable()
+            .csrf().disable() // Disable CSRF
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+                // NEW: Allow all OPTIONS requests globally for CORS preflight checks
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
+                
+                // The unauthenticated paths (login/register)
                 .requestMatchers("/api/auth/**").permitAll()
+                
+                // All other authenticated paths
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
