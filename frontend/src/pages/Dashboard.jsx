@@ -25,13 +25,10 @@ const Dashboard = () => {
   const [currentSweet, setCurrentSweet] = useState(null);
 
   const fetchSweets = async () => {
-  
     if (sweets.length === 0) setLoading(true);
     
     try {
-    
       const params = new URLSearchParams();
-
       if (filters.name) params.append("name", filters.name);
       if (filters.category) params.append("category", filters.category);
       if (filters.minPrice) params.append("minPrice", filters.minPrice);
@@ -50,7 +47,6 @@ const Dashboard = () => {
     }
   };
 
- 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchSweets();
@@ -62,10 +58,7 @@ const Dashboard = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-
-
   const handleBuy = async (sweet) => {
-
     const input = prompt(`How many kg of ${sweet.name} do you want to buy? (Available: ${sweet.quantity}kg)`);
   
     if (!input) return;
@@ -81,12 +74,12 @@ const Dashboard = () => {
       return;
     }
 
-
     const totalCost = quantityToBuy * sweet.price;
 
     const confirmMsg = `You are buying ${quantityToBuy}kg of ${sweet.name}.\nTotal Bill: ₹${totalCost}\n\nProceed?`;
     if (!window.confirm(confirmMsg)) return;
 
+    // Optimistic Update
     setSweets((prevSweets) =>
       prevSweets.map((s) =>
         s.id === sweet.id
@@ -96,13 +89,9 @@ const Dashboard = () => {
     );
 
     try {
-     
       await api.post(`/api/sweets/${sweet.id}/purchase?quantity=${quantityToBuy}`);
-
       enqueueSnackbar(`Purchase Successful! Paid ₹${totalCost} for ${quantityToBuy}kg of ${sweet.name}.`, { variant: "success" });
-      
     } catch (err) {
-
       setSweets((prevSweets) =>
         prevSweets.map((s) =>
           s.id === sweet.id ? { ...s, quantity: s.quantity + quantityToBuy } : s
@@ -114,9 +103,7 @@ const Dashboard = () => {
   };
 
   const handleRestock = async (id) => {
-
     const quantityStr = prompt("Enter quantity to add:", "10");
-    
     if (!quantityStr) return; 
 
     const quantity = parseInt(quantityStr, 10);
@@ -126,15 +113,11 @@ const Dashboard = () => {
     }
 
     try {
-   
       await api.post(`/api/sweets/${id}/restock?quantity=${quantity}`);
-      
       enqueueSnackbar(`Successfully added ${quantity} items!`, { variant: "success" });
-      
       fetchSweets(); 
     } catch (err) {
       console.error("Restock Error:", err.response);
-      
       if (err.response?.status === 403) {
         enqueueSnackbar("Permission Denied: Only 'ADMIN' role can restock.", { variant: "error" });
       } else {
@@ -154,19 +137,33 @@ const Dashboard = () => {
     }
   };
 
+  // --- THIS IS THE FIXED FUNCTION ---
   const handleSaveSweet = async (data) => {
     try {
+      // THE FIX: We create a payload that includes BOTH variable names.
+      // This ensures that whether your Java backend wants "image" or "imageUrl", it gets it!
+      const payload = {
+        ...data,
+        image: data.imageUrl || data.image,      // 1. Send as "image"
+        imageUrl: data.imageUrl || data.image    // 2. Send as "imageUrl"
+      };
+
       if (currentSweet) {
-        await api.put(`/api/sweets/${currentSweet.id}`, data);
-        enqueueSnackbar("Sweet updated", { variant: "success" });
+        await api.put(`/api/sweets/${currentSweet.id}`, payload);
+        enqueueSnackbar("Sweet updated successfully!", { variant: "success" });
       } else {
-        await api.post("/api/sweets", data);
-        enqueueSnackbar("New sweet added", { variant: "success" });
+        await api.post("/api/sweets", payload);
+        enqueueSnackbar("New sweet added successfully!", { variant: "success" });
       }
+      
       setModalOpen(false);
-      fetchSweets();
+      
+      // THE FIX: Reload the page to show the new image instantly
+      window.location.reload(); 
+      
     } catch (err) {
-      enqueueSnackbar("Operation failed", { variant: "error" });
+      console.error(err);
+      enqueueSnackbar("Operation failed. Check console.", { variant: "error" });
     }
   };
 
@@ -212,7 +209,6 @@ const Dashboard = () => {
           onChange={handleFilterChange}
           sx={{ minWidth: 150 }}
         >
-      
           <MenuItem value="">All</MenuItem> 
           <MenuItem value="Bakery">Bakery</MenuItem>
           <MenuItem value="Candy">Candy</MenuItem>
@@ -223,7 +219,6 @@ const Dashboard = () => {
         <TextField label="Min Price" name="minPrice" type="number" size="small" value={filters.minPrice} onChange={handleFilterChange} sx={{ width: 100 }} />
         <TextField label="Max Price" name="maxPrice" type="number" size="small" value={filters.maxPrice} onChange={handleFilterChange} sx={{ width: 100 }} />
       </Box>
-
 
       {loading && sweets.length === 0 ? (
         <Box display="flex" justifyItems="center" justifyContent="center" mt={5}>
@@ -250,7 +245,6 @@ const Dashboard = () => {
         </Grid>
       )}
 
- 
       {user?.role === "ADMIN" && (
         <Fab 
           color="primary" 
