@@ -8,8 +8,7 @@ This project demonstrates **backend API design**, **database integration**, **au
 
 ## 🔗 Live Application (Bonus)
 
-- **Frontend (Vercel):**  
-  https://ai-kata-sweet-shop-git-main-anshikagoel3s-projects.vercel.app
+-  **Frontend (Vercel):** [https://ai-kata-sweet-shop.vercel.app](https://ai-kata-sweet-shop.vercel.app)
 
 - **Backend (Railway):**  
   https://ai-kata-sweet-shop-backend.up.railway.app
