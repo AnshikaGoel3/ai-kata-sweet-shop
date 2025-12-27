@@ -2,7 +2,7 @@ package com.sweetshop.config;
 
 import com.sweetshop.security.JwtAuthenticationFilter;
 
-import java.util.List; // Using List instead of Arrays.asList for cleaner syntax
+import java.util.List; 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public CorsConfigurationSource corsConfigurationSource() {
 
     config.setAllowedOriginPatterns(List.of(
             "https://ai-kata-sweet-shop.vercel.app",
-            "http://localhost:3000"
+            "http://localhost:5173"
     ));
 
     config.setAllowedMethods(List.of(
@@ -56,23 +56,26 @@ public CorsConfigurationSource corsConfigurationSource() {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors()
-            .and()
-            .csrf().disable()
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-            )
 
-            .addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+        .csrf(csrf -> csrf.disable())
+
+        .sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .anyRequest().authenticated()
+        )
+
+        .addFilterBefore(
+            jwtAuthenticationFilter,
+            UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }

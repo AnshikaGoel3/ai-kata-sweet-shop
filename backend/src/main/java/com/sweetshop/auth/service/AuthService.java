@@ -31,22 +31,24 @@ public class AuthService {
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(role != null ? role : Role.USER) 
+                .role(role != null ? role : Role.USER)
                 .build();
 
         return userRepository.save(user);
     }
 
-
     public String login(String username, String password) {
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+                
+                System.out.println("LOGIN USER: " + user.getUsername());
+                System.out.println("LOGIN ROLE FROM DB: " + user.getRole());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        // ✅ FIX: role converted to String
         return jwtUtil.generateToken(
                 user.getUsername(),
                 user.getRole().name()

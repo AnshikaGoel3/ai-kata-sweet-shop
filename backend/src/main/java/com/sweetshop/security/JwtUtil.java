@@ -2,7 +2,6 @@ package com.sweetshop.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -29,10 +28,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
-    }
-
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -41,11 +36,11 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String extractRole(String token) {
-        return extractClaims(token).get("role", String.class);
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername());
+    public String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
     }
 }

@@ -8,15 +8,22 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+    const extractRole = (decoded) => {
+      if (decoded.role) {
+        return decoded.role;  
+      }
+      return "USER";
+    };
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-       
-        setUser({ 
-          username: decoded.sub || decoded.username, 
-          role: decoded.role || "USER" 
+        setUser({
+          username: decoded.sub || decoded.username,
+          role: extractRole(decoded),
         });
       } catch (e) {
         localStorage.removeItem("token");
@@ -27,10 +34,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     const res = await api.post("/api/auth/login", { username, password });
-    const token = res.data.token; 
+
+    const token = res.data.token;
     localStorage.setItem("token", token);
+
     const decoded = jwtDecode(token);
-    setUser({ username: decoded.sub, role: decoded.role });
+
+    setUser({
+      username: decoded.sub,
+      role: extractRole(decoded),
+    });
+
     return true;
   };
 
