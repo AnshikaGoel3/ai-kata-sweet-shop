@@ -9,7 +9,7 @@ This project demonstrates **backend API design, authentication & authorization, 
 # 🔗 Live Application
 
 ### Frontend (Vercel)
-https://ai-kata-sweet-shop-b04t1xds3-anshikagoel3s-projects.vercel.app
+https://ai-kata-sweet-shop.vercel.app/
 
 ### Backend (Render)
 https://ai-kata-sweet-shop.onrender.com
