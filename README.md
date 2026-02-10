@@ -1,123 +1,137 @@
-
 # 🍬 Sweet Shop Management System
 
-A **full-stack Sweet Shop Management System** built as part of the **AI Kata – TDD Assessment**.  
-This project demonstrates **backend API design**, **database integration**, **authentication**, **frontend UI development**, **testing practices**, **version control**, **deployment**, and **responsible AI usage**.
+A **full-stack Sweet Shop Management System** built as part of the **AI Kata – TDD Assessment**.
+
+This project demonstrates **backend API design, authentication & authorization, database persistence, role-based access control, frontend UI development, testing, deployment, and responsible AI usage**.
 
 ---
 
-## 🔗 Live Application (Bonus)
+# 🔗 Live Application
 
--  **Frontend (Vercel):** [https://ai-kata-sweet-shop.vercel.app](https://ai-kata-sweet-shop.vercel.app)
+### Frontend (Vercel)
+https://ai-kata-sweet-shop-b04t1xds3-anshikagoel3s-projects.vercel.app
 
-- **Backend (Railway):**  
-  https://ai-kata-sweet-shop-backend.up.railway.app
+### Backend (Render)
+https://ai-kata-sweet-shop.onrender.com
 
 ---
 
-## 🧩 Project Structure
+# 🧩 Project Structure
 
 ```
-
 .
-├── backend/        # Spring Boot REST API (SQLite + JWT)
-├── frontend/       # React + Material UI SPA
-└── README.md       # Project documentation
-
-````
+├── backend/        # Spring Boot REST API (PostgreSQL + JWT)
+├── frontend/       # React (Vite) + Material UI
+└── README.md
+```
 
 ---
 
-## 🖼️ Application Screenshots
+# Key Features
+
+## Authentication & Authorization
+- JWT-based login & signup
+- Role-based access control (ADMIN / USER)
+- Protected endpoints using Spring Security
+
+## Admin Capabilities
+- Add sweets
+- Update inventory
+- Delete sweets
+- Manage stock
+
+## User Capabilities
+- View sweets catalog
+- Search & filter sweets
+- Purchase sweets
+
+---
+
+# Application Screenshots
 
 ### Login Screen
-![Login Page](./login.png.png)
+![Login](./login.png.png)
 
-### User Dashboard (View & Purchase Sweets)
+### User Dashboard
 ![User Dashboard](./dashboard-user.png.png)
 
-### Admin Dashboard (Manage Inventory)
+### Admin Dashboard
 ![Admin Dashboard](./dashboard-admin.png.png)
 
-### Add / Edit Sweet (Admin)
-![Add / Edit Sweet](./admin-add-sweet.png.png)
+### Add / Edit Sweet
+![Add Sweet](./admin-add-sweet.png.png)
 
 ---
 
-## 🤖 AI Usage Declaration (Mandatory)
+# 🤖 AI Usage Declaration
 
-As required by the assessment, below is a **transparent and accurate breakdown** of how AI tools were used during development.
+## AI Tools Used
+- ChatGPT – Backend architecture, security configuration, debugging
+- Google Gemini – Frontend UI improvements and deployment support
 
-### AI Tools Used
-- **ChatGPT** – Backend logic, Java/Spring Boot architecture, and API design
-- **Google Gemini** – Frontend development support, deployment guidance, and debugging
+## How AI Was Used
 
-### How AI Was Used
+### Backend Development
+- Generated Spring Boot boilerplate
+- Assisted with JWT authentication flow
+- Business logic implemented and validated manually
 
-1. **Backend Development (ChatGPT)**  
-   - Generated initial Spring Boot boilerplate (controllers, services, repositories)
-   - Assisted with API structure and authentication flow  
-   - All **business logic**, **stock validation**, and **JWT security rules** were implemented and verified manually
+### Frontend Development
+- Assisted in building React components using Material UI
+- API integration via Axios
 
-2. **Frontend Development (Google Gemini)**  
-   - Assisted in building and refining React components using Material UI  
-   - Helped with UI structure, state handling, and API integration using Axios
+### Deployment & Debugging
+- Helped resolve CORS and environment variable issues
+- Assisted deployment to Vercel and Render
 
-3. **Deployment Support (Google Gemini)**  
-   - Provided guidance for deploying the frontend on **Vercel**  
-   - Assisted with backend deployment on **Railway**, including environment variable setup
-
-4. **Debugging & Issue Resolution (Google Gemini)**  
-   - Helped diagnose and resolve CORS issues between React and Spring Boot  
-   - Assisted in debugging frontend API errors and deployment-related issues
-
-### Reflection
-AI tools significantly accelerated development by handling boilerplate, UI refinement, deployment setup, and debugging support.  
-All AI-generated suggestions were **carefully reviewed, tested, and modified** to ensure correctness and compliance with assessment requirements.
+All AI-generated suggestions were reviewed and verified.
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-### Backend
+## Backend
 - Java 17
 - Spring Boot 3
-- SQLite (Persistent Database)
-- Spring Security + JWT Authentication
+- PostgreSQL (Render DB)
+- Spring Security + JWT
 - Maven
 
-### Frontend
+## Frontend
 - React (Vite)
-- Material UI (MUI)
+- Material UI
 - Axios
 
 ---
 
-## 🧪 Testing Strategy
+# Testing Strategy
 
-- **Backend:**  
-  Core business logic developed using **TDD principles** (Red → Green → Refactor)
+## Backend
+- Core business logic implemented using **TDD principles**
 
-- **Frontend:**  
-  UI-level validation for stock availability (e.g., disabling purchase when stock is zero)
+## Frontend
+- UI validation for stock availability
 
 ---
 
-## 📦 Running the Project Locally
+# Running Locally
 
-### Backend
+## Backend
 
 ```bash
 cd backend
 mvn spring-boot:run
-````
+```
 
-Server runs on:
-`http://localhost:8080`
+Runs at:
+
+```
+http://localhost:8080
+```
 
 ---
 
-### Frontend
+## Frontend
 
 ```bash
 cd frontend
@@ -125,13 +139,14 @@ npm install
 npm run dev
 ```
 
-Client runs on:
-`http://localhost:5173`
+Runs at:
+
+```
+http://localhost:5173
+```
 
 ---
 
-## 👤 Author
+# Author
 
 **Anshika Goel**
-
-
