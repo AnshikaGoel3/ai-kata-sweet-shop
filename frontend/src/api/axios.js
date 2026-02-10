@@ -1,13 +1,12 @@
 import axios from "axios";
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 const api = axios.create({
-  baseURL: //"http://localhost:8080",
-  "https://ai-kata-sweet-shop-production.up.railway.app/", 
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
 
 api.interceptors.request.use(
   (config) => {
