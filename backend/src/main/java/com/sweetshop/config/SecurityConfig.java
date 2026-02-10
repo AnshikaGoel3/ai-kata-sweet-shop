@@ -2,7 +2,7 @@ package com.sweetshop.config;
 
 import com.sweetshop.security.JwtAuthenticationFilter;
 
-import java.util.List; 
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,57 +25,68 @@ public class SecurityConfig {
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-@Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOriginPatterns(List.of(
-            "https://ai-kata-sweet-shop.vercel.app",
-            "http://localhost:5173"
-    ));
+    // CORS CONFIGURATION
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    config.setAllowedMethods(List.of(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS"
-    ));
+        CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedHeaders(List.of(
-            "Authorization",
-            "Content-Type"
-    ));
+        config.setAllowedOriginPatterns(List.of(
+                "https://ai-kata-sweet-shop.vercel.app",
+                "https://*.vercel.app",
+                "http://localhost:5173"
+        ));
 
-    config.setExposedHeaders(List.of("Authorization"));
-    config.setAllowCredentials(true);
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-    return source;
-}
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type"
+        ));
 
+        config.setExposedHeaders(List.of("Authorization"));
+        config.setAllowCredentials(true);
 
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
+        return source;
+    }
+
+    // SECURITY FILTER
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-        .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable())
 
-        .sessionManagement(session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
 
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/api/auth/**").permitAll()
-            .anyRequest().authenticated()
-        )
+            .authorizeHttpRequests(auth -> auth
 
-        .addFilterBefore(
-            jwtAuthenticationFilter,
-            UsernamePasswordAuthenticationFilter.class
-        );
+                    // Allow preflight requests
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                    // Public endpoints
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/sweet/**").permitAll()
+
+                    // Everything else secured
+                    .anyRequest().authenticated()
+            )
+
+            .addFilterBefore(
+                    jwtAuthenticationFilter,
+                    UsernamePasswordAuthenticationFilter.class
+            );
 
         return http.build();
     }
